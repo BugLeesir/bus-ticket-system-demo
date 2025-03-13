@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lyr.busticketsystemdemo.dao.mapper.BusRouteMapper">
+
+    <resultMap id="BaseResultMap" type="com.lyr.busticketsystemdemo.domain.BusRoute">
+            <id property="routeId" column="route_id" />
+            <result property="routeName" column="route_name" />
+            <result property="departure" column="departure" />
+            <result property="destination" column="destination" />
+            <result property="departureTime" column="departure_time" />
+            <result property="arrivalTime" column="arrival_time" />
+            <result property="price" column="price" />
+            <result property="seatsTotal" column="seats_total" />
+            <result property="seatsAvailable" column="seats_available" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        route_id,route_name,departure,destination,departure_time,arrival_time,
+        price,seats_total,seats_available
+    </sql>
+</mapper>
