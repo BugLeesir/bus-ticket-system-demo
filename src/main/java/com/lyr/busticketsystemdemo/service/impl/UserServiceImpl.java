@@ -9,6 +9,8 @@ import com.lyr.busticketsystemdemo.model.dto.LoginDTO;
 import com.lyr.busticketsystemdemo.model.dto.MemberDTO;
 import com.lyr.busticketsystemdemo.service.UserService;
 import com.lyr.busticketsystemdemo.dao.mapper.UserMapper;
+import com.lyr.busticketsystemdemo.util.PasswordUtil;
+import com.lyr.busticketsystemdemo.util.RSAUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -60,7 +62,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         if (user == null) {
             return false;
         }
-        return user.getPassword().equals(loginDTO.getPassword());
+        // 解密密码
+        String rawPassword = RSAUtil.decryptPassword(loginDTO.getPassword());
+        return PasswordUtil.matches(rawPassword, user.getPassword());
     }
 
     @Override
