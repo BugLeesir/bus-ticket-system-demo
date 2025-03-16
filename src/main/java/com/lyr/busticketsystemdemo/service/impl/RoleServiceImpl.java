@@ -1,10 +1,14 @@
 package com.lyr.busticketsystemdemo.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.lyr.busticketsystemdemo.dao.mapper.UserRoleMapper;
 import com.lyr.busticketsystemdemo.domain.Role;
 import com.lyr.busticketsystemdemo.service.RoleService;
 import com.lyr.busticketsystemdemo.dao.mapper.RoleMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
 * @author yunruili
@@ -15,6 +19,14 @@ import org.springframework.stereotype.Service;
 public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role>
     implements RoleService{
 
+    @Autowired
+    private UserRoleMapper userRoleMapper;
+
+    @Override
+    public List<Role> getRoleListByUserId(Long userId) {
+        List<Long> roleIds = userRoleMapper.getRoleIdsByUserId(userId);
+        return this.listByIds(roleIds);
+    }
 }
 
 

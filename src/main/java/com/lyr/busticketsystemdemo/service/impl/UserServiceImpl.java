@@ -62,6 +62,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         }
         return user.getPassword().equals(loginDTO.getPassword());
     }
+
+    @Override
+    public Long getUserIdByUserName(String userName) {
+        return userMapper.getUserByName(userName).getUserId();
+    }
 }
 
 

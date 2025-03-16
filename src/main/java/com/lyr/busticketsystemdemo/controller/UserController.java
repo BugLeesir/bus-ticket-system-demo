@@ -1,14 +1,18 @@
 package com.lyr.busticketsystemdemo.controller;
 
+import cn.dev33.satoken.stp.StpUtil;
 import com.lyr.busticketsystemdemo.model.dto.LoginDTO;
+import com.lyr.busticketsystemdemo.model.dto.RegisterDTO;
+import com.lyr.busticketsystemdemo.model.dto.UserResultDTO;
+import com.lyr.busticketsystemdemo.service.RoleService;
 import com.lyr.busticketsystemdemo.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 用户控制器
@@ -25,12 +29,50 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping(path = "/login", produces = "application/json")
-    public String login(@RequestBody LoginDTO loginDTO) {
+    @Autowired
+    private RoleService roleService;
+
+    @PostMapping("/login")
+    public UserResultDTO login(@RequestBody LoginDTO loginDTO) {
         if(userService.checkLogin(loginDTO)) {
-            return "登录成功";
+            // 进行登录
+            Long userId = userService.getUserIdByUserName(loginDTO.getUsername());
+            StpUtil.login(userId);
+            UserResultDTO userResultDTO = new UserResultDTO();
+            userResultDTO.setUsername(loginDTO.getUsername());
+            List<String>roleList = new ArrayList<>();
+            roleService.getRoleListByUserId(userId).forEach(role -> {
+                roleList.add(role.getRoleName());
+            });
+            userResultDTO.setRoles(roleList);
+            userResultDTO.setToken(StpUtil.getTokenValue());
+            userResultDTO.setTokenName(StpUtil.getTokenName());
+            return userResultDTO;
         } else {
-            return "登录失败";
+            return null;
         }
+    }
+
+    @GetMapping("/logout")
+    public void logout() {
+        StpUtil.logout();
+    }
+
+    @GetMapping("/info")
+    public UserResultDTO getUserByToken(String token) {
+        Long userId = Long.valueOf(StpUtil.getLoginIdByToken(token).toString());
+        UserResultDTO userResultDTO = new UserResultDTO();
+        userResultDTO.setUsername(userService.getById(userId).getUsername());
+        List<String> roleList = new ArrayList<>();
+        roleService.getRoleListByUserId( userId).forEach(role -> {
+            roleList.add(role.getRoleName());
+        });
+        userResultDTO.setRoles(roleList);
+        return userResultDTO;
+    }
+
+    @PostMapping("/register")
+    public void register(@RequestBody RegisterDTO registerDTO) {
+        // 注册
     }
 }

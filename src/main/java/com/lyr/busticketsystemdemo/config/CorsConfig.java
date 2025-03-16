@@ -17,10 +17,10 @@ public class CorsConfig {
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
-        config.addAllowedOriginPattern("*"); // 允许所有域名访问（生产环境建议指定域名）
-        config.addAllowedMethod("*");  // 允许所有请求方法
-        config.addAllowedHeader("*");  // 允许所有请求头
-        config.setAllowCredentials(true);  // 允许携带 Cookie
+        config.addAllowedOriginPattern("*");
+        config.addAllowedMethod("*");
+        config.addAllowedHeader("*");
+        config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
