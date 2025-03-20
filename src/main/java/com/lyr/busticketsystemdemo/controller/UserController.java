@@ -1,11 +1,14 @@
 package com.lyr.busticketsystemdemo.controller;
 
 import cn.dev33.satoken.stp.StpUtil;
+import cn.dev33.satoken.util.SaResult;
 import com.lyr.busticketsystemdemo.model.dto.LoginDTO;
+import com.lyr.busticketsystemdemo.model.dto.MemberDTO;
 import com.lyr.busticketsystemdemo.model.dto.RegisterDTO;
 import com.lyr.busticketsystemdemo.model.dto.UserResultDTO;
 import com.lyr.busticketsystemdemo.service.RoleService;
 import com.lyr.busticketsystemdemo.service.UserService;
+import com.lyr.busticketsystemdemo.util.RSAUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,7 +75,22 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public void register(@RequestBody RegisterDTO registerDTO) {
+    public SaResult register(@RequestBody RegisterDTO registerDTO) {
         // 注册
+        if(userService.checkHasUser(registerDTO.getUsername())) {
+            return SaResult.error("用户名已存在");
+        }
+        MemberDTO memberDTO = new MemberDTO();
+        memberDTO.setUsername(registerDTO.getUsername());
+        // 解密密码
+        memberDTO.setPassword(RSAUtil.decryptPassword(registerDTO.getPassword()));
+        memberDTO.setEmail(registerDTO.getEmail());
+        memberDTO.setPhone(registerDTO.getPhone());
+        memberDTO.setStatus(1);
+        if(userService.addMember(memberDTO)) {
+            return SaResult.ok("注册成功");
+        } else {
+            return SaResult.error("注册失败");
+        }
     }
 }

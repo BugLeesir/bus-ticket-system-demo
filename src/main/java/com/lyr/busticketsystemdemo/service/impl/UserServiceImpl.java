@@ -13,6 +13,7 @@ import com.lyr.busticketsystemdemo.util.PasswordUtil;
 import com.lyr.busticketsystemdemo.util.RSAUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
 * @author yunruili
@@ -29,12 +30,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     private UserMapper userMapper;
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean addMember(MemberDTO memberDTO) {
         // 将MemberDTO转换为User实体
         User user = new User();
         user.setUserId(YitIdHelper.nextId());
         user.setUsername(memberDTO.getUsername());
-        user.setPassword(memberDTO.getPassword());
+        // 加密密码
+        user.setPassword(PasswordUtil.hashPassword(memberDTO.getPassword()));
         user.setEmail(memberDTO.getEmail());
         user.setPhone(memberDTO.getPhone());
         user.setStatus(memberDTO.getStatus());
@@ -49,7 +52,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         UserRole userRole = new UserRole();
         userRole.setUserId(user.getUserId());
         // 1: 会员, 2: 管理员
-        userRole.setRoleId(Long.valueOf(1));
+        userRole.setRoleId(1L);
 
         // 保存UserRole实体到数据库
         int rows = userRoleMapper.insert(userRole);
@@ -65,6 +68,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         // 解密密码
         String rawPassword = RSAUtil.decryptPassword(loginDTO.getPassword());
         return PasswordUtil.matches(rawPassword, user.getPassword());
+    }
+
+    @Override
+    public boolean checkHasUser(String userName) {
+        return userMapper.getUserByName(userName) != null;
     }
 
     @Override

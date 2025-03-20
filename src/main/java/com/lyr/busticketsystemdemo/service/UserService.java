@@ -26,6 +26,13 @@ public interface UserService extends IService<User> {
     boolean checkLogin(LoginDTO loginDTO);
 
     /**
+     * 检查是否存在用户
+     * @param userName
+     * @return
+     */
+    boolean checkHasUser(String userName);
+
+    /**
      * 根据用户名获取用户id
      * @param userName
      * @return
