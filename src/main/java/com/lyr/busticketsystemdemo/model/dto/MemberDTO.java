@@ -12,11 +12,6 @@ import lombok.Data;
 public class MemberDTO {
 
     /**
-     * 会员ID
-     */
-    private String id;
-
-    /**
      * 会员姓名
      */
     private String username;

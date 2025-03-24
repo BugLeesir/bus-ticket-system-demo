@@ -1,9 +1,12 @@
 package com.lyr.busticketsystemdemo.service;
 
+import com.github.pagehelper.PageInfo;
 import com.lyr.busticketsystemdemo.domain.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lyr.busticketsystemdemo.model.dto.LoginDTO;
 import com.lyr.busticketsystemdemo.model.dto.MemberDTO;
+import com.lyr.busticketsystemdemo.model.dto.MemberSearchDTO;
+import com.lyr.busticketsystemdemo.model.vo.MemberSearchVO;
 
 /**
 * @author yunruili
@@ -38,4 +41,11 @@ public interface UserService extends IService<User> {
      * @return
      */
     Long getUserIdByUserName(String userName);
+
+    /**
+     * 会员查询
+     * @param memberSearchDTO
+     * @return
+     */
+    PageInfo<MemberSearchVO> searchMembers(MemberSearchDTO memberSearchDTO);
 }

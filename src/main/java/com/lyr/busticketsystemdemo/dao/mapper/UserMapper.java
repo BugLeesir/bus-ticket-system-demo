@@ -3,6 +3,9 @@ package com.lyr.busticketsystemdemo.dao.mapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.lyr.busticketsystemdemo.domain.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.lyr.busticketsystemdemo.model.dto.MemberSearchDTO;
+
+import java.util.List;
 
 /**
 * @author yunruili
@@ -22,6 +25,8 @@ public interface UserMapper extends BaseMapper<User> {
                 .eq(User::getUsername, userName)
         );
     }
+
+    List<User> searchMembers(MemberSearchDTO memberSearchDTO);
 }
 
 

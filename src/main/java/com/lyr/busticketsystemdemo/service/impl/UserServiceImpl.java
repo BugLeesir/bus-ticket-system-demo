@@ -1,12 +1,16 @@
 package com.lyr.busticketsystemdemo.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.github.yitter.idgen.YitIdHelper;
 import com.lyr.busticketsystemdemo.dao.mapper.UserRoleMapper;
 import com.lyr.busticketsystemdemo.domain.User;
 import com.lyr.busticketsystemdemo.domain.UserRole;
 import com.lyr.busticketsystemdemo.model.dto.LoginDTO;
 import com.lyr.busticketsystemdemo.model.dto.MemberDTO;
+import com.lyr.busticketsystemdemo.model.dto.MemberSearchDTO;
+import com.lyr.busticketsystemdemo.model.vo.MemberSearchVO;
 import com.lyr.busticketsystemdemo.service.UserService;
 import com.lyr.busticketsystemdemo.dao.mapper.UserMapper;
 import com.lyr.busticketsystemdemo.util.PasswordUtil;
@@ -14,6 +18,13 @@ import com.lyr.busticketsystemdemo.util.RSAUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
 * @author yunruili
@@ -79,6 +90,47 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     public Long getUserIdByUserName(String userName) {
         return userMapper.getUserByName(userName).getUserId();
     }
+
+    @Override
+    public PageInfo<MemberSearchVO> searchMembers(MemberSearchDTO memberSearchDTO) {
+        // 开启分页
+        PageHelper.startPage(memberSearchDTO.getPageNum(), memberSearchDTO.getPageSize());
+
+        // 查询用户列表
+        List<User> userList = userMapper.searchMembers(memberSearchDTO);
+
+        // **封装 PageInfo，确保分页数据完整**
+        PageInfo<User> pageInfo = new PageInfo<>(userList);
+
+        // 转换 `User` 为 `MemberSearchVO`
+        List<MemberSearchVO> memberSearchVOList = userList.stream().map(user -> {
+            MemberSearchVO memberSearchVO = new MemberSearchVO();
+            memberSearchVO.setId(user.getUserId().toString());
+            memberSearchVO.setUsername(user.getUsername());
+            memberSearchVO.setEmail(user.getEmail());
+            memberSearchVO.setPhone(user.getPhone());
+            memberSearchVO.setStatus(user.getStatus());
+
+            // 转换注册时间格式
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate localDate = user.getCreateTime().toInstant()
+                    .atZone(ZoneOffset.UTC) // 确保时区一致
+                    .toLocalDate();
+            memberSearchVO.setRegisterTime(localDate.format(formatter));
+
+            return memberSearchVO;
+        }).toList();
+
+        // **用原 `PageInfo` 复制分页信息**
+        PageInfo<MemberSearchVO> resultPageInfo = new PageInfo<>(memberSearchVOList);
+        resultPageInfo.setPageNum(pageInfo.getPageNum());
+        resultPageInfo.setPageSize(pageInfo.getPageSize());
+        resultPageInfo.setTotal(pageInfo.getTotal());
+        resultPageInfo.setPages(pageInfo.getPages());
+
+        return resultPageInfo;
+    }
+
 }
 
 
