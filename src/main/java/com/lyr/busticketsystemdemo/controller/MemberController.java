@@ -1,6 +1,9 @@
 package com.lyr.busticketsystemdemo.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.lyr.busticketsystemdemo.model.dto.MemberDTO;
+import com.lyr.busticketsystemdemo.model.dto.MemberSearchDTO;
+import com.lyr.busticketsystemdemo.model.vo.MemberSearchVO;
 import com.lyr.busticketsystemdemo.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,5 +36,10 @@ public class MemberController {
         } else {
             LOGGER.info("添加会员失败");
         }
+    }
+
+    @PostMapping("/search")
+    public PageInfo<MemberSearchVO> search(@RequestBody MemberSearchDTO memberSearchDTO){
+        return userService.searchMembers(memberSearchDTO);
     }
 }
