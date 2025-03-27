@@ -20,6 +20,10 @@ public interface UserRoleMapper extends BaseMapper<UserRole> {
         List<UserRole> userRoles = this.selectList(Wrappers.<UserRole>query().lambda().eq(UserRole::getUserId,userId));
         return userRoles.stream().map(UserRole::getRoleId).collect(Collectors.toList());
     }
+
+    default boolean deleteByUserId(Long userId){
+        return this.delete(Wrappers.<UserRole>query().lambda().eq(UserRole::getUserId,userId))>0;
+    }
 }
 
 

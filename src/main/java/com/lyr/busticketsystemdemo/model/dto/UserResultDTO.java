@@ -2,7 +2,6 @@ package com.lyr.busticketsystemdemo.model.dto;
 
 import lombok.Data;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,6 +21,11 @@ public class UserResultDTO {
      * 用户角色
      */
     private List<String> roles;
+
+    /**
+     * 用户状态
+     */
+    private Integer status;
 
     /**
      * 用户token

@@ -3,6 +3,7 @@ package com.lyr.busticketsystemdemo.dao.mapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.lyr.busticketsystemdemo.domain.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.lyr.busticketsystemdemo.model.dto.AdminSearchDTO;
 import com.lyr.busticketsystemdemo.model.dto.MemberSearchDTO;
 
 import java.util.List;
@@ -26,7 +27,20 @@ public interface UserMapper extends BaseMapper<User> {
         );
     }
 
+    /**
+     * 批量设置用户状态
+     * @param userIds 用户id列表
+     * @param status 用户状态
+     * @return 是否设置成功
+     */
+    default boolean batchSetStatus(List<Long> userIds, Integer status) {
+        return this.update(null, Wrappers.<User>lambdaUpdate().in(User::getUserId, userIds).set(User::getStatus, status)) > 0 ;
+    }
+
+
     List<User> searchMembers(MemberSearchDTO memberSearchDTO);
+
+    List<User> searchAdmins(AdminSearchDTO adminSearchDTO);
 }
 
 
