@@ -3,10 +3,11 @@ package com.lyr.busticketsystemdemo.service;
 import com.github.pagehelper.PageInfo;
 import com.lyr.busticketsystemdemo.domain.User;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.lyr.busticketsystemdemo.model.dto.LoginDTO;
-import com.lyr.busticketsystemdemo.model.dto.MemberDTO;
-import com.lyr.busticketsystemdemo.model.dto.MemberSearchDTO;
+import com.lyr.busticketsystemdemo.model.dto.*;
+import com.lyr.busticketsystemdemo.model.vo.AdminSearchVO;
 import com.lyr.busticketsystemdemo.model.vo.MemberSearchVO;
+
+import java.util.List;
 
 /**
 * @author yunruili
@@ -22,11 +23,18 @@ public interface UserService extends IService<User> {
     boolean addMember(MemberDTO memberDTO);
 
     /**
+     * 添加管理员
+     * @param adminDTO
+     * @return
+     */
+    boolean addAdmin(AdminDTO adminDTO);
+
+    /**
      * 检查登录
      * @param loginDTO
      * @return
      */
-    boolean checkLogin(LoginDTO loginDTO);
+    Integer checkLogin(LoginDTO loginDTO);
 
     /**
      * 检查是否存在用户
@@ -34,6 +42,43 @@ public interface UserService extends IService<User> {
      * @return
      */
     boolean checkHasUser(String userName);
+
+    /**
+     * 设置用户状态
+     * @param userId
+     * @param status
+     * @return
+     */
+    boolean setStatus(Long userId, Integer status);
+
+    /**
+     * 删除用户
+     * @param userId
+     * @return
+     */
+    boolean deleteUser(Long userId);
+
+    /**
+     * 批量删除用户
+     * @param userIds
+     * @return
+     */
+    boolean batchDeleteUser(List<Long> userIds);
+
+    /**
+     * 批量设置用户状态
+     * @param userIds
+     * @param status
+     * @return
+     */
+    boolean batchSetStatus(List<Long> userIds, Integer status);
+
+    /**
+     * 更新用户信息
+     * @param userUpdateDTO
+     * @return
+     */
+    boolean updateUser(UserUpdateDTO userUpdateDTO);
 
     /**
      * 根据用户名获取用户id
@@ -48,4 +93,11 @@ public interface UserService extends IService<User> {
      * @return
      */
     PageInfo<MemberSearchVO> searchMembers(MemberSearchDTO memberSearchDTO);
+
+    /**
+     * 管理员查询
+     * @param adminSearchDTO
+     * @return
+     */
+    PageInfo<AdminSearchVO> searchAdmins(AdminSearchDTO adminSearchDTO);
 }

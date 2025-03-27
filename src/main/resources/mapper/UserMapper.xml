@@ -35,4 +35,23 @@
             AND CONCAT(#{registerTime[1]}, ' 23:59:59')
         </if>
     </select>
+
+    <select id="searchAdmins" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM user u
+        JOIN user_role ur ON u.user_id = ur.user_id
+        JOIN role r ON ur.role_id = r.role_id
+        WHERE ur.role_id = 2
+        <if test="username != null and username != ''">
+            AND u.username LIKE CONCAT('%', #{username}, '%')
+        </if>
+        <if test="phone != null and phone != ''">
+            AND u.phone LIKE CONCAT('%', #{phone}, '%')
+        </if>
+        <if test="registerTime != null and registerTime.size() == 2">
+            AND u.create_time BETWEEN CONCAT(#{registerTime[0]}, ' 00:00:00')
+            AND CONCAT(#{registerTime[1]}, ' 23:59:59')
+        </if>
+    </select>
+
 </mapper>

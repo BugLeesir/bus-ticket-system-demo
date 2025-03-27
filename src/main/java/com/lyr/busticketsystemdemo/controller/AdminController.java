@@ -2,8 +2,11 @@ package com.lyr.busticketsystemdemo.controller;
 
 import cn.dev33.satoken.util.SaResult;
 import com.github.pagehelper.PageInfo;
+import com.lyr.busticketsystemdemo.model.dto.AdminDTO;
+import com.lyr.busticketsystemdemo.model.dto.AdminSearchDTO;
 import com.lyr.busticketsystemdemo.model.dto.MemberDTO;
 import com.lyr.busticketsystemdemo.model.dto.MemberSearchDTO;
+import com.lyr.busticketsystemdemo.model.vo.AdminSearchVO;
 import com.lyr.busticketsystemdemo.model.vo.MemberSearchVO;
 import com.lyr.busticketsystemdemo.service.UserService;
 import com.lyr.busticketsystemdemo.util.RSAUtil;
@@ -16,30 +19,29 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 会员控制器
+ * 管理员控制器类
  *
  * @author yunruili
- * @date 2025/03/12/20:23
+ * @date 2025/03/25/23:28
  **/
 @RestController
-@RequestMapping("/member")
-public class MemberController {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(MemberController.class);
+@RequestMapping("/admin")
+public class AdminController {
+    private static final Logger LOGGER = LoggerFactory.getLogger(AdminController.class);
 
     @Autowired
     private UserService userService;
 
     @PostMapping("/add")
-    public SaResult add(@RequestBody MemberDTO memberDTO){
-       // 检查用户名是否存在
-        if(userService.checkHasUser(memberDTO.getUsername())){
+    public SaResult add(@RequestBody AdminDTO adminDTO){
+        // 检查用户名是否存在
+        if(userService.checkHasUser(adminDTO.getUsername())){
             return SaResult.error("用户名已存在");
         }
         // 解密密码
-        memberDTO.setPassword(RSAUtil.decryptPassword(memberDTO.getPassword()));
+        adminDTO.setPassword(RSAUtil.decryptPassword(adminDTO.getPassword()));
         // 添加会员
-        boolean added = userService.addMember(memberDTO);
+        boolean added = userService.addAdmin(adminDTO);
         if(added){
             return SaResult.ok("添加成功");
         }else{
@@ -48,7 +50,7 @@ public class MemberController {
     }
 
     @PostMapping("/search")
-    public PageInfo<MemberSearchVO> search(@RequestBody MemberSearchDTO memberSearchDTO){
-        return userService.searchMembers(memberSearchDTO);
+    public PageInfo<AdminSearchVO> search(@RequestBody AdminSearchDTO adminSearchDTO){
+        return userService.searchAdmins(adminSearchDTO);
     }
 }
