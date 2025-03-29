@@ -2,6 +2,9 @@ package com.lyr.busticketsystemdemo.dao.mapper;
 
 import com.lyr.busticketsystemdemo.domain.Announcement;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.lyr.busticketsystemdemo.model.dto.AnnouncementSearchDTO;
+
+import java.util.List;
 
 /**
 * @author yunruili
@@ -10,6 +13,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @Entity com.lyr.busticketsystemdemo.domain.Announcement
 */
 public interface AnnouncementMapper extends BaseMapper<Announcement> {
+
+    List<Announcement> searchAnnouncements(AnnouncementSearchDTO announcementSearchDTO);
 
 }
 

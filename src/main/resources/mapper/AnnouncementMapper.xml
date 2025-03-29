@@ -14,4 +14,18 @@
     <sql id="Base_Column_List">
         announcement_id,title,content,publish_time
     </sql>
+
+    <select id="searchAnnouncements" resultMap="BaseResultMap">
+        SELECT  <include refid="Base_Column_List" />
+        FROM announcement
+        WHERE 1=1
+        <if test="title != null and title != ''">
+            AND title LIKE CONCAT('%', #{title}, '%')
+        </if>
+        <if test="publishTime != null">
+            AND publish_time BETWEEN CONCAT(#{publishTime}, ' 00:00:00')
+            AND CONCAT(#{publishTime}, ' 23:59:59')
+        </if>
+    </select>
+
 </mapper>
