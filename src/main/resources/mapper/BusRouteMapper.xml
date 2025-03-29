@@ -20,4 +20,33 @@
         route_id,route_name,departure,destination,departure_time,arrival_time,
         price,seats_total,seats_available
     </sql>
+
+    <select id="searchBusRoutes" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM bus_route
+        WHERE 1=1
+        <if test="routeName != null and routeName != ''">
+            AND route_name LIKE CONCAT('%', #{routeName}, '%')
+        </if>
+        <if test="departure != null and departure != ''">
+            AND departure LIKE CONCAT('%', #{departure}, '%')
+        </if>
+        <if test="destination != null and destination != ''">
+            AND destination LIKE CONCAT('%', #{destination}, '%')
+        </if>
+        <if test="departureTime != null and departureTime != ''">
+            AND departure_time &gt;= #{departureTime}
+        </if>
+        <if test="arrivalTime != null and arrivalTime != ''">
+            AND arrival_time &lt;= #{arrivalTime}
+        </if>
+        <if test="priceLower != null and priceLower != ''">
+            AND price &gt;= #{priceLower}
+        </if>
+        <if test="priceUpper != null and priceUpper != ''">
+            AND price &lt;= #{priceUpper}
+        </if>
+        ORDER BY price ASC
+    </select>
+
 </mapper>

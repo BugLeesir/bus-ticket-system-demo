@@ -1,7 +1,11 @@
 package com.lyr.busticketsystemdemo.dao.mapper;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.lyr.busticketsystemdemo.domain.BusRoute;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.lyr.busticketsystemdemo.model.dto.BusRouteSearchDTO;
+
+import java.util.List;
 
 /**
 * @author yunruili
@@ -11,6 +15,13 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 */
 public interface BusRouteMapper extends BaseMapper<BusRoute> {
 
+    default BusRoute getBusRouteByBusRouteName(String busRouteName) {
+        return this.selectOne(Wrappers.<BusRoute>query().lambda()
+                .eq(BusRoute::getRouteName, busRouteName)
+        );
+    }
+
+    List<BusRoute> searchBusRoutes(BusRouteSearchDTO  busRouteSearchDTO);
 }
 
 
