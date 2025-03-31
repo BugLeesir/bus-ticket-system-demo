@@ -2,6 +2,9 @@ package com.lyr.busticketsystemdemo.dao.mapper;
 
 import com.lyr.busticketsystemdemo.domain.Message;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.lyr.busticketsystemdemo.model.dto.MessageSearchDTO;
+
+import java.util.List;
 
 /**
 * @author yunruili
@@ -10,7 +13,9 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @Entity com.lyr.busticketsystemdemo.domain.Message
 */
 public interface MessageMapper extends BaseMapper<Message> {
+    List<Message> searchMessages(MessageSearchDTO messageSearchDTO);
 
+    List<Message> selectRepliesByMessageId(Long messageId);
 }
 
 

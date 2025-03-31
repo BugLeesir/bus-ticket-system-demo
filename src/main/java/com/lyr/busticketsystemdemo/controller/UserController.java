@@ -67,6 +67,7 @@ public class UserController {
     public UserResultDTO getUserByToken(String token) {
         Long userId = Long.valueOf(StpUtil.getLoginIdByToken(token).toString());
         UserResultDTO userResultDTO = new UserResultDTO();
+        userResultDTO.setUserId(userId.toString());
         userResultDTO.setUsername(userService.getById(userId).getUsername());
         List<String> roleList = new ArrayList<>();
         roleService.getRoleListByUserId( userId).forEach(role -> {
