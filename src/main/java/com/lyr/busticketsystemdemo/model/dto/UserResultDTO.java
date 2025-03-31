@@ -18,6 +18,11 @@ public class UserResultDTO {
     private  String username;
 
     /**
+     * 用户id
+     */
+    private  String userId;
+
+    /**
      * 用户角色
      */
     private List<String> roles;
