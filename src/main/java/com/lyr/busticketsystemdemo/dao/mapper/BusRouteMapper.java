@@ -21,6 +21,8 @@ public interface BusRouteMapper extends BaseMapper<BusRoute> {
         );
     }
 
+    void updateSeatsAvailable(Long busRouteId, Integer delta);
+
     List<BusRoute> searchBusRoutes(BusRouteSearchDTO  busRouteSearchDTO);
 }
 

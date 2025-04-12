@@ -49,4 +49,10 @@
         ORDER BY price ASC
     </select>
 
+    <update id="updateSeatsAvailable">
+        UPDATE bus_route
+        SET seats_available = seats_available + #{delta}
+        WHERE route_id = #{busRouteId}
+    </update>
+
 </mapper>

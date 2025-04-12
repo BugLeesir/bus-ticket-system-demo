@@ -14,4 +14,15 @@
     <sql id="Base_Column_List">
         detail_id,order_id,passenger_name,seat_number
     </sql>
+
+    <select id="selectOccupiedSeatsByRouteId" resultType="string">
+        SELECT seat_number
+        FROM order_details
+        WHERE order_id IN (
+            SELECT order_id
+            FROM order_table
+            WHERE route_id = #{busRouteId}
+        )
+    </select>
+
 </mapper>
