@@ -2,6 +2,10 @@ package com.lyr.busticketsystemdemo.dao.mapper;
 
 import com.lyr.busticketsystemdemo.domain.OrderTable;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.lyr.busticketsystemdemo.model.dto.OrderSearchDTO;
+import com.lyr.busticketsystemdemo.model.vo.OrderSearchVO;
+
+import java.util.List;
 
 /**
 * @author yunruili
@@ -11,6 +15,9 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 */
 public interface OrderTableMapper extends BaseMapper<OrderTable> {
 
+    List<OrderSearchVO> searchOrders(OrderSearchDTO orderSearchDTO);
+
+    OrderSearchVO searchOrderById(Long orderId);
 }
 
 

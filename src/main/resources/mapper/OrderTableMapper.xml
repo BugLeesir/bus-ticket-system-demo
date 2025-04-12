@@ -16,4 +16,33 @@
     <sql id="Base_Column_List">
         order_id,user_id,route_id,order_status,create_time,payment_time
     </sql>
+
+    <select id="searchOrders" resultType="com.lyr.busticketsystemdemo.model.vo.OrderSearchVO">
+        SELECT o.order_id, o.user_id, u.username, o.route_id, r.route_name, o.order_status,
+        o.create_time, o.payment_time
+        FROM order_table o
+        LEFT JOIN user u ON o.user_id = u.user_id
+        LEFT JOIN bus_route r ON o.route_id = r.route_id
+        WHERE 1=1
+        <if test="orderStatus != null and orderStatus != ''">
+            AND o.order_status = #{orderStatus}
+        </if>
+        <if test="username != null and username != ''">
+            AND u.username LIKE CONCAT('%', #{username}, '%')
+        </if>
+        <if test="createTime != null and createTime.size() == 2">
+            AND o.create_time BETWEEN CONCAT(#{createTime[0]}, ' 00:00:00')
+            AND CONCAT(#{createTime[1]}, ' 23:59:59')
+        </if>
+        ORDER BY o.create_time DESC
+    </select>
+
+    <select id="searchOrderById" resultType="com.lyr.busticketsystemdemo.model.vo.OrderSearchVO">
+        SELECT o.order_id, o.user_id, u.username, o.route_id, r.route_name, o.order_status,
+               o.create_time, o.payment_time
+        FROM order_table o
+                 LEFT JOIN user u ON o.user_id = u.user_id
+                 LEFT JOIN bus_route r ON o.route_id = r.route_id
+        WHERE o.order_id = #{orderId}
+    </select>
 </mapper>

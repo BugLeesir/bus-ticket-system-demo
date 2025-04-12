@@ -5,28 +5,28 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * 管理员查询DTO
+ * 订单查询DTO
  *
  * @author yunruili
- * @date 2025/03/25/23:38
+ * @date 2025/04/10/03:51
  **/
 @Data
-public class
-AdminSearchDTO {
+public class OrderSearchDTO {
+
     /**
-     * 管理员姓名
+     * 订单状态
+     */
+    private String orderStatus;
+
+    /**
+     * 下单用户姓名
      */
     private String username;
 
     /**
-     * 管理员手机号
+     * 订单创建时间
      */
-    private String phone;
-
-    /**
-     * 管理员注册时间
-     */
-    private List<String> registerTime;
+    private List<String> createTime;
 
     /**
      * 当前页
